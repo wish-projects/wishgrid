@@ -1,77 +1,129 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { VibePicker } from "@/components/vibe-picker"
-import { MoodboardGenerator } from "@/components/moodboard-generator"
-import { LayoutSelector } from "@/components/layout-selector"
-import { ExportControls } from "@/components/export-controls"
-import { Card } from "@/components/ui/card"
+import { useState } from "react";
+import { VibePicker } from "@/components/vibe-picker";
+import { MoodboardGenerator } from "@/components/moodboard-generator";
+import { LayoutSelector } from "@/components/layout-selector";
+import { ExportControls } from "@/components/export-controls";
 
-export type LayoutType = "grid" | "collage" | "polaroid"
+export type LayoutType = "grid" | "collage" | "polaroid";
 
 export interface MoodboardImage {
-  id: number
+  id: number;
   src: {
-    large: string
-    medium: string
-    small: string
-  }
-  photographer: string
-  alt: string
+    large: string;
+    medium: string;
+    small: string;
+  };
+  photographer: string;
+  alt: string;
 }
 
 export default function Home() {
-  const [selectedVibe, setSelectedVibe] = useState<string>("")
-  const [images, setImages] = useState<MoodboardImage[]>([])
-  const [selectedLayout, setSelectedLayout] = useState<LayoutType>("grid")
-  const [isGenerating, setIsGenerating] = useState(false)
+  const [selectedVibe, setSelectedVibe] = useState<string>("");
+  const [images, setImages] = useState<MoodboardImage[]>([]);
+  const [selectedLayout, setSelectedLayout] = useState<LayoutType>("grid");
+  const [isGenerating, setIsGenerating] = useState(false);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50 p-4">
-      <div className="max-w-7xl mx-auto">
-        <header className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-800 mb-2">✨ Moodboard Generator</h1>
-          <p className="text-gray-600">Create beautiful, aesthetic moodboards for your creative inspiration</p>
+    <div className="min-h-screen bg-[#232323] flex flex-col justify-between">
+      <div className="max-w-4xl mx-auto w-full px-4">
+        <header className="text-center py-6">
+          <div className="bg-[#353535] rounded-b-lg py-2">
+            <h1 className="text-3xl font-bold text-yellow-400 tracking-wide">
+              Wish Grid
+            </h1>
+          </div>
         </header>
 
-        <div className="grid lg:grid-cols-4 gap-6">
-          {/* Controls Panel */}
-          <div className="lg:col-span-1 space-y-6">
-            <Card className="p-6">
-              <h2 className="font-semibold mb-4">Choose Your Vibe</h2>
-              <VibePicker selectedVibe={selectedVibe} onVibeChange={setSelectedVibe} />
-            </Card>
+        {/* Vibe Buttons */}
+        <div className="flex flex-wrap gap-3 justify-center mb-4">
+          {[
+            "Minimalism",
+            "Cottagecore",
+            "Earthy Tones",
+            "Polaroid Picnic",
+            "Vintage Film",
+          ].map((vibe) => (
+            <button
+              key={vibe}
+              className={`px-4 py-2 rounded-md font-medium text-gray-200 bg-[#353535] hover:bg-yellow-400 hover:text-black transition-colors ${
+                selectedVibe === vibe ? "bg-yellow-400 text-black" : ""
+              }`}
+              onClick={() => setSelectedVibe(vibe)}
+            >
+              {vibe}
+            </button>
+          ))}
+        </div>
 
-            {images.length > 0 && (
-              <Card className="p-6">
-                <div className="space-y-4">
-                  <div>
-                    <h3 className="font-medium mb-3">Layout</h3>
-                    <LayoutSelector selectedLayout={selectedLayout} onLayoutChange={setSelectedLayout} />
-                  </div>
+        {/* Search Bar */}
+        <div className="flex items-center bg-[#353535] rounded-md px-3 py-2 mb-4">
+          <span className="text-yellow-400 mr-2">🔍</span>
+          <input
+            className="flex-1 bg-transparent outline-none text-gray-200 placeholder-gray-400"
+            placeholder="Search for a vibe..."
+            value={selectedVibe}
+            onChange={(e) => setSelectedVibe(e.target.value)}
+          />
+        </div>
 
-                  <div>
-                    <h3 className="font-medium mb-3">Export</h3>
-                    <ExportControls images={images} layout={selectedLayout} />
-                  </div>
-                </div>
-              </Card>
-            )}
+        {/* Layout Selector and Controls */}
+        <div className="flex items-center gap-4 mb-4">
+          <LayoutSelector
+            selectedLayout={selectedLayout}
+            onLayoutChange={setSelectedLayout}
+          />
+          <div className="flex gap-2 ml-auto">
+            <button className="bg-[#353535] text-gray-200 px-4 py-2 rounded-md flex items-center gap-2 hover:bg-yellow-400 hover:text-black transition-colors">
+              <span>Regenerate</span> <span className="text-yellow-400">↻</span>
+            </button>
+            <button className="bg-[#353535] text-gray-200 px-4 py-2 rounded-md flex items-center gap-2 hover:bg-yellow-400 hover:text-black transition-colors">
+              <span>Share</span> <span className="text-yellow-400">🔗</span>
+            </button>
+            <ExportControls images={images} layout={selectedLayout} />
           </div>
+        </div>
 
-          {/* Moodboard Display */}
-          <div className="lg:col-span-3">
-            <MoodboardGenerator
-              vibe={selectedVibe}
-              layout={selectedLayout}
-              images={images}
-              onImagesChange={setImages}
-              isGenerating={isGenerating}
-              onGeneratingChange={setIsGenerating}
-            />
+        {/* Moodboard Display */}
+        <div className="bg-[#232323] border border-[#353535] rounded-lg min-h-[250px] mb-8">
+          <MoodboardGenerator
+            vibe={selectedVibe}
+            layout={selectedLayout}
+            images={images}
+            onImagesChange={setImages}
+            isGenerating={isGenerating}
+            onGeneratingChange={setIsGenerating}
+          />
+        </div>
+
+        {/* Ideas Section */}
+        <div className="text-center mt-8 mb-4">
+          <h2 className="text-yellow-400 text-2xl italic font-handwriting mb-4">
+            Ideas for your next moodboard
+          </h2>
+          <div className="grid grid-cols-2 gap-6 max-w-lg mx-auto">
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className="aspect-square bg-gray-200 rounded-lg" />
+            ))}
           </div>
         </div>
       </div>
+
+      {/* Footer */}
+      <footer className="bg-[#353535] py-4 mt-8">
+        <div className="text-center">
+          <span className="text-yellow-400 font-handwriting text-2xl">
+            Wish Grid
+          </span>
+          <span className="text-yellow-400 font-handwriting text-xl mx-2">
+            aka
+          </span>
+          <span className="text-white text-xl font-semibold">
+            Mood Board Generater
+          </span>
+        </div>
+      </footer>
     </div>
-  )
+  );
 }

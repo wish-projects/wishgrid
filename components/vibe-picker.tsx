@@ -1,87 +1,79 @@
-"use client"
+"use client";
 
-import type React from "react"
-
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
+import type React from "react";
+import { useState } from "react";
 
 const PRESET_VIBES = [
-  "Minimal",
-  "Retro",
-  "Dark Academia",
-  "Techy",
-  "Coquette",
+  "Minimalism",
   "Cottagecore",
-  "Y2K",
-  "Grunge",
-  "Pastel",
-  "Neon",
-  "Vintage",
-  "Boho",
-]
+  "Earthy Tones",
+  "Polaroid Picnic",
+  "Vintage Film",
+];
 
 interface VibePickerProps {
-  selectedVibe: string
-  onVibeChange: (vibe: string) => void
+  selectedVibe: string;
+  onVibeChange: (vibe: string) => void;
 }
 
 export function VibePicker({ selectedVibe, onVibeChange }: VibePickerProps) {
-  const [customVibe, setCustomVibe] = useState("")
+  const [customVibe, setCustomVibe] = useState("");
 
   const handlePresetClick = (vibe: string) => {
-    onVibeChange(vibe)
-    setCustomVibe("")
-  }
+    onVibeChange(vibe);
+    setCustomVibe("");
+  };
 
   const handleCustomSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     if (customVibe.trim()) {
-      onVibeChange(customVibe.trim())
+      onVibeChange(customVibe.trim());
     }
-  }
+  };
 
   return (
     <div className="space-y-4">
       <div>
-        <h3 className="text-sm font-medium mb-2">Preset Vibes</h3>
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2 justify-center">
           {PRESET_VIBES.map((vibe) => (
-            <Badge
+            <button
               key={vibe}
-              variant={selectedVibe === vibe ? "default" : "outline"}
-              className="cursor-pointer hover:bg-purple-100"
+              className={`px-4 py-2 rounded-full font-medium text-gray-200 bg-[#353535] hover:bg-yellow-400 hover:text-black transition-colors ${
+                selectedVibe === vibe ? "bg-yellow-400 text-black" : ""
+              }`}
               onClick={() => handlePresetClick(vibe)}
             >
               {vibe}
-            </Badge>
+            </button>
           ))}
         </div>
       </div>
 
       <div>
-        <h3 className="text-sm font-medium mb-2">Custom Vibe</h3>
-        <form onSubmit={handleCustomSubmit} className="flex gap-2">
-          <Input
-            placeholder="e.g. Japanese summer, pastel horror"
+        <form
+          onSubmit={handleCustomSubmit}
+          className="flex gap-2 justify-center"
+        >
+          <input
+            className="flex-1 max-w-xs bg-[#353535] text-gray-200 placeholder-gray-400 rounded-md px-3 py-2 outline-none"
+            placeholder="Custom vibe..."
             value={customVibe}
             onChange={(e) => setCustomVibe(e.target.value)}
-            className="flex-1"
           />
-          <Button type="submit" size="sm">
+          <button
+            type="submit"
+            className="bg-yellow-400 text-black px-4 py-2 rounded-md font-semibold hover:bg-yellow-300 transition-colors"
+          >
             Set
-          </Button>
+          </button>
         </form>
       </div>
 
       {selectedVibe && (
-        <div className="p-3 bg-purple-50 rounded-lg">
-          <p className="text-sm">
-            <span className="font-medium">Current vibe:</span> {selectedVibe}
-          </p>
+        <div className="p-3 bg-yellow-400 text-black rounded-lg text-center font-semibold">
+          <span>Current vibe: {selectedVibe}</span>
         </div>
       )}
     </div>
-  )
+  );
 }
