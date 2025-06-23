@@ -22,20 +22,33 @@ export function MoodboardGenerator({
   onGeneratingChange,
 }: MoodboardGeneratorProps) {
   const [error, setError] = useState<string>("");
+  const [lastUsedVibe, setLastUsedVibe] = useState<string>("");
 
-  const generateMoodboard = async () => {
-    if (!vibe) return;
+  const generateMoodboard = async (isRegenerating: boolean = false) => {
+    // Don't allow generation without a vibe
+    if (!vibe && !isRegenerating) return;
+    // Don't allow regeneration without a previous vibe
+    if (isRegenerating && !lastUsedVibe) return;
+
     onGeneratingChange(true);
     setError("");
+
     try {
       const response = await fetch("/api/generate-moodboard", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ query: vibe }),
+        body: JSON.stringify({ query: isRegenerating ? lastUsedVibe : vibe }),
       });
+
       if (!response.ok) throw new Error("Failed to generate moodboard");
+
       const data = await response.json();
       onImagesChange(data.photos || []);
+
+      // Save the vibe for regeneration only when creating new
+      if (!isRegenerating) {
+        setLastUsedVibe(vibe);
+      }
     } catch (err) {
       setError("Failed to generate moodboard. Please try again.");
       console.error("Error generating moodboard:", err);
@@ -48,41 +61,58 @@ export function MoodboardGenerator({
     onImagesChange(images.filter((img) => img.id !== imageId));
   };
 
+  const LoadingSpinner = () => (
+    <svg className="w-4 h-4 mr-2 animate-spin" fill="none" viewBox="0 0 24 24">
+      <circle
+        className="opacity-25"
+        cx="12"
+        cy="12"
+        r="10"
+        stroke="currentColor"
+        strokeWidth="4"
+      ></circle>
+      <path
+        className="opacity-75"
+        fill="currentColor"
+        d="M4 12a8 8 0 018-8v8z"
+      ></path>
+    </svg>
+  );
+
   return (
     <div className="space-y-4">
       <div className="flex gap-2">
+        {/* Create Button */}
         <button
-          onClick={generateMoodboard}
+          onClick={() => generateMoodboard(false)}
           disabled={!vibe || isGenerating}
           className="flex-1 bg-yellow-400 text-black font-bold py-2 px-4 rounded-md flex items-center justify-center gap-2 hover:bg-yellow-300 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
         >
-          {isGenerating ? (
+          {isGenerating && !images.length ? (
             <>
-              <svg
-                className="w-4 h-4 mr-2 animate-spin"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                ></circle>
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8v8z"
-                ></path>
-              </svg>
-              Generating...
+              <LoadingSpinner />
+              Creating...
+            </>
+          ) : (
+            "Create"
+          )}
+        </button>
+
+        {/* Regenerate Button */}
+        <button
+          onClick={() => generateMoodboard(true)}
+          disabled={!lastUsedVibe || isGenerating}
+          className="flex-1 bg-[#353535] text-gray-200 font-bold py-2 px-4 rounded-md flex items-center justify-center gap-2 hover:bg-yellow-400 hover:text-black transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+        >
+          {isGenerating && images.length ? (
+            <>
+              <LoadingSpinner />
+              Regenerating...
             </>
           ) : (
             <>
               <span className="mr-2">↻</span>
-              {images.length > 0 ? "Regenerate" : "Generate"} Moodboard
+              Regenerate
             </>
           )}
         </button>
@@ -96,7 +126,7 @@ export function MoodboardGenerator({
 
       {!vibe && (
         <div className="p-8 text-center bg-[#353535] text-gray-400 rounded-lg">
-          <p>Choose a vibe to start generating your moodboard</p>
+          <p>Choose a vibe to start creating your moodboard</p>
         </div>
       )}
 

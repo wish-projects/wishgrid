@@ -69,18 +69,12 @@ export default function Home() {
         </div>
 
         {/* Layout Selector and Controls */}
-        <div className="flex items-center gap-4 mb-4">
+        <div className="flex items-center justify-between mb-4">
           <LayoutSelector
             selectedLayout={selectedLayout}
             onLayoutChange={setSelectedLayout}
           />
-          <div className="flex gap-2 ml-auto">
-            <button className="bg-[#353535] text-gray-200 px-4 py-2 rounded-md flex items-center gap-2 hover:bg-yellow-400 hover:text-black transition-colors">
-              <span>Regenerate</span> <span className="text-yellow-400">↻</span>
-            </button>
-            <button className="bg-[#353535] text-gray-200 px-4 py-2 rounded-md flex items-center gap-2 hover:bg-yellow-400 hover:text-black transition-colors">
-              <span>Share</span> <span className="text-yellow-400">🔗</span>
-            </button>
+          <div className="flex gap-2">
             <ExportControls images={images} layout={selectedLayout} />
           </div>
         </div>
@@ -95,18 +89,6 @@ export default function Home() {
             isGenerating={isGenerating}
             onGeneratingChange={setIsGenerating}
           />
-        </div>
-
-        {/* Ideas Section */}
-        <div className="text-center mt-8 mb-4">
-          <h2 className="text-yellow-400 text-2xl italic font-handwriting mb-4">
-            Ideas for your next moodboard
-          </h2>
-          <div className="grid grid-cols-2 gap-6 max-w-lg mx-auto">
-            {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="aspect-square bg-gray-200 rounded-lg" />
-            ))}
-          </div>
         </div>
       </div>
 

@@ -1,33 +1,62 @@
-import { type NextRequest, NextResponse } from "next/server"
+import { type NextRequest, NextResponse } from "next/server";
 
-const PEXELS_API_KEY = process.env.PEXELS_API_KEY || "YOUR_PEXELS_API_KEY_HERE"
+const PEXELS_API_KEY = process.env.PEXELS_API_KEY || "YOUR_PEXELS_API_KEY_HERE";
 
 export async function POST(request: NextRequest) {
   try {
-    const { query } = await request.json()
+    const { query } = await request.json();
 
     if (!query) {
-      return NextResponse.json({ error: "Query is required" }, { status: 400 })
+      return NextResponse.json({ error: "Query is required" }, { status: 400 });
     }
 
-    const response = await fetch(
-      `https://api.pexels.com/v1/search?query=${encodeURIComponent(query)}&per_page=12&orientation=all`,
+    // First, get the total number of results to determine available pages
+    const countResponse = await fetch(
+      `https://api.pexels.com/v1/search?query=${encodeURIComponent(
+        query
+      )}&per_page=1`,
       {
         headers: {
           Authorization: PEXELS_API_KEY,
         },
-      },
-    )
+      }
+    );
 
-    if (!response.ok) {
-      throw new Error("Failed to fetch from Pexels API")
+    if (!countResponse.ok) {
+      throw new Error("Failed to fetch from Pexels API");
     }
 
-    const data = await response.json()
+    const countData = await countResponse.json();
+    const totalResults = countData.total_results;
+    const maxPage = Math.min(Math.ceil(totalResults / 12), 100); // Pexels limits to 100 pages
 
-    return NextResponse.json(data)
+    // Generate a random page number
+    const randomPage = Math.floor(Math.random() * maxPage) + 1;
+
+    // Fetch the actual images with the random page
+    const response = await fetch(
+      `https://api.pexels.com/v1/search?query=${encodeURIComponent(
+        query
+      )}&per_page=12&page=${randomPage}&orientation=all`,
+      {
+        headers: {
+          Authorization: PEXELS_API_KEY,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch from Pexels API");
+    }
+
+    const data = await response.json();
+
+    return NextResponse.json(data);
   } catch (error) {
-    console.error("API Error:", error)
-    return NextResponse.json({ error: "Failed to generate moodboard" }, { status: 500 })
+    console.error("API Error:", error);
+    return NextResponse.json(
+      { error: "Failed to generate moodboard" },
+      { status: 500 }
+    );
   }
 }

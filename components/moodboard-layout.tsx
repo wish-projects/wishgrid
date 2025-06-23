@@ -49,7 +49,7 @@ export function MoodboardLayout({
   );
 
   const renderCollageLayout = () => (
-    <div className="relative p-6 bg-white rounded-lg shadow-lg min-h-[600px]">
+    <div className="relative p-6 bg-white rounded-lg shadow-lg min-h-[600px] isolate">
       {images.map((image, index) => {
         const positions = [
           {
@@ -136,11 +136,19 @@ export function MoodboardLayout({
               <Button
                 size="sm"
                 variant="destructive"
-                className="absolute -top-2 -right-2 opacity-0 group-hover:opacity-100 transition-opacity w-6 h-6 p-0 z-10"
-                onClick={() => onRemoveImage(image.id)}
+                className="absolute -top-2 -right-2 opacity-0 group-hover:opacity-100 transition-opacity w-6 h-6 p-0 z-[100]"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onRemoveImage(image.id);
+                }}
               >
                 <X className="w-3 h-3" />
               </Button>
+              <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg">
+                <p className="text-white text-xs absolute bottom-2 left-2">
+                  by {image.photographer}
+                </p>
+              </div>
             </div>
           </div>
         );
@@ -149,7 +157,7 @@ export function MoodboardLayout({
   );
 
   const renderPolaroidLayout = () => (
-    <div className="flex flex-wrap gap-6 justify-center p-6 bg-white rounded-lg shadow-lg">
+    <div className="flex flex-wrap gap-6 justify-center p-6 bg-white rounded-lg shadow-lg isolate">
       {images.map((image, index) => {
         const rotations = [
           "-8deg",
@@ -170,6 +178,7 @@ export function MoodboardLayout({
             style={{
               transform: `rotate(${rotation})`,
               width: "200px",
+              zIndex: index + 1,
             }}
           >
             <div className="aspect-square overflow-hidden mb-3">
@@ -190,8 +199,11 @@ export function MoodboardLayout({
             <Button
               size="sm"
               variant="destructive"
-              className="absolute -top-2 -right-2 opacity-0 group-hover:opacity-100 transition-opacity w-6 h-6 p-0"
-              onClick={() => onRemoveImage(image.id)}
+              className="absolute -top-2 -right-2 opacity-0 group-hover:opacity-100 transition-opacity w-6 h-6 p-0 z-[100]"
+              onClick={(e) => {
+                e.stopPropagation();
+                onRemoveImage(image.id);
+              }}
             >
               <X className="w-3 h-3" />
             </Button>
