@@ -2,40 +2,10 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { VibePicker } from "@/components/vibe-picker";
-import { MoodboardGenerator } from "@/components/moodboard-generator";
-import { LayoutSelector } from "@/components/layout-selector";
-import { ExportControls } from "@/components/export-controls";
-
-export type LayoutType = "grid" | "collage" | "polaroid";
-
-export interface MoodboardImage {
-  id: number;
-  src: {
-    large: string;
-    medium: string;
-    small: string;
-  };
-  photographer: string;
-  alt: string;
-}
 
 export default function Home() {
   const [selectedVibe, setSelectedVibe] = useState<string>("");
-  const [images, setImages] = useState<MoodboardImage[]>([]);
-  const [selectedLayout, setSelectedLayout] = useState<LayoutType>("grid");
-  const [isGenerating, setIsGenerating] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-
-  const handleGenerate = () => {
-    // This function will be passed to the MoodboardGenerator
-    // It will be triggered by the "Create" button inside that component
-    // We can use the searchQuery or the selectedVibe
-    const vibeToUse = searchQuery || selectedVibe;
-    if (vibeToUse) {
-      setSelectedVibe(vibeToUse);
-    }
-  };
 
   return (
     <div className="min-h-screen bg-[#232323] flex flex-col justify-between">
@@ -92,29 +62,6 @@ export default function Home() {
                 setSelectedVibe(searchQuery);
               }
             }}
-          />
-        </div>
-
-        {/* Layout Selector and Controls */}
-        <div className="flex items-center justify-between mb-4">
-          <LayoutSelector
-            selectedLayout={selectedLayout}
-            onLayoutChange={setSelectedLayout}
-          />
-          <div className="flex gap-2">
-            <ExportControls images={images} layout={selectedLayout} />
-          </div>
-        </div>
-
-        {/* Moodboard Display */}
-        <div className="bg-[#232323] border border-[#353535] rounded-lg min-h-[250px] mb-8">
-          <MoodboardGenerator
-            vibe={selectedVibe}
-            layout={selectedLayout}
-            images={images}
-            onImagesChange={setImages}
-            isGenerating={isGenerating}
-            onGeneratingChange={setIsGenerating}
           />
         </div>
       </div>
