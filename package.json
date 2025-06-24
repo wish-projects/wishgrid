@@ -43,7 +43,6 @@
     "cmdk": "latest",
     "date-fns": "4.1.0",
     "embla-carousel-react": "latest",
-    "fabric": "^6.7.0",
     "html2canvas": "latest",
     "input-otp": "latest",
     "jspdf": "latest",
@@ -63,7 +62,6 @@
     "zod": "^3.24.1"
   },
   "devDependencies": {
-    "@types/fabric": "^5.3.10",
     "@types/node": "^22",
     "@types/react": "^19",
     "@types/react-dom": "^19",
