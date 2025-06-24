@@ -34,10 +34,14 @@ export function LayoutSelector({ selectedLayout, onLayoutChange }: LayoutSelecto
             key={layout.id}
             variant={selectedLayout === layout.id ? "default" : "outline"}
             size="sm"
-            className="w-10 h-10 p-0"
+            className={`w-10 h-10 p-0 border-2 transition-colors ${
+              selectedLayout === layout.id
+                ? 'border-[#00CCEB] shadow-[0_0_1px_1px_#00CCEB] bg-transparent'
+                : 'border-[#4E4E4E] bg-transparent hover:bg-[#00CCEB] hover:text-black'
+            }`}
             onClick={() => onLayoutChange(layout.id)}
           >
-            <Icon className="w-4 h-4" />
+            <Icon className="w-4 h-4 text-white" />
           </Button>
         )
       })}

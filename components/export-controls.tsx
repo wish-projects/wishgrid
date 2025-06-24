@@ -104,7 +104,7 @@ export function ExportControls({ images, layout }: ExportControlsProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button disabled={isExporting || images.length === 0} className="w-full">
+        <Button disabled={isExporting || images.length === 0} className="w-full bg-[#353535] border-2 border-[#00CCEB] text-white">
           {isExporting ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Download className="w-4 h-4 mr-2" />}
           Export
           <ChevronDown className="w-4 h-4 ml-2" />

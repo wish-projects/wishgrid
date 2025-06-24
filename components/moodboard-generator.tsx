@@ -86,7 +86,7 @@ export function MoodboardGenerator({
         <button
           onClick={() => generateMoodboard(false)}
           disabled={!vibe || isGenerating}
-          className="flex-1 bg-yellow-400 text-black font-bold py-2 px-4 rounded-md flex items-center justify-center gap-2 hover:bg-yellow-300 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+          className="flex-1 bg-[#00CCEB] text-black font-bold py-3 px-6 rounded-md flex items-center justify-center gap-2 hover:bg-[#00b2d3] transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
         >
           {isGenerating && !images.length ? (
             <>
@@ -102,7 +102,7 @@ export function MoodboardGenerator({
         <button
           onClick={() => generateMoodboard(true)}
           disabled={!lastUsedVibe || isGenerating}
-          className="flex-1 bg-[#353535] text-gray-200 font-bold py-2 px-4 rounded-md flex items-center justify-center gap-2 hover:bg-yellow-400 hover:text-black transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+          className="flex-1 bg-[#353535] text-gray-200 font-bold py-2 px-4 rounded-md flex items-center justify-center gap-2 transition-colors disabled:opacity-60 disabled:cursor-not-allowed border-2 border-[#00CCEB] hover:bg-[#00CCEB] hover:text-black focus:shadow-[0_0_4px_1px_#00CCEB] hover:shadow-[0_0_4px_1px_#00CCEB]"
         >
           {isGenerating && images.length ? (
             <>
@@ -124,9 +124,25 @@ export function MoodboardGenerator({
         </div>
       )}
 
-      {!vibe && (
-        <div className="p-8 text-center bg-[#353535] text-gray-400 rounded-lg">
-          <p>Choose a vibe to start creating your moodboard</p>
+      {!vibe && !isGenerating && images.length === 0 && (
+        <div className="flex flex-col items-center justify-center p-4 text-center bg-[#353535] text-gray-400 rounded-lg min-h-[400px]">
+          <video
+            loop
+            autoPlay
+            muted
+            style={{
+              maxWidth: "600px",
+              width: "100%",
+              margin: "0 auto",
+              borderRadius: "16px",
+            }}
+          >
+            <source src="/videos/vid1.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+          <p className="mt-8 text-2xl font-semibold">
+            Choose a vibe to start creating your moodboard
+          </p>
         </div>
       )}
 

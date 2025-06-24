@@ -4,7 +4,7 @@ const PEXELS_API_KEY = process.env.PEXELS_API_KEY || "YOUR_PEXELS_API_KEY_HERE";
 
 export async function POST(request: NextRequest) {
   try {
-    const { query } = await request.json();
+    const { query, page = 1 } = await request.json();
 
     if (!query) {
       return NextResponse.json({ error: "Query is required" }, { status: 400 });
@@ -30,14 +30,11 @@ export async function POST(request: NextRequest) {
     const totalResults = countData.total_results;
     const maxPage = Math.min(Math.ceil(totalResults / 12), 100); // Pexels limits to 100 pages
 
-    // Generate a random page number
-    const randomPage = Math.floor(Math.random() * maxPage) + 1;
-
     // Fetch the actual images with the random page
     const response = await fetch(
       `https://api.pexels.com/v1/search?query=${encodeURIComponent(
         query
-      )}&per_page=12&page=${randomPage}&orientation=all`,
+      )}&per_page=12&page=${page}&orientation=all`,
       {
         headers: {
           Authorization: PEXELS_API_KEY,

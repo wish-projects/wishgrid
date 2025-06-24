@@ -68,7 +68,41 @@
   }
 }
 
+@font-face {
+  font-family: 'Magazine Letter';
+  src: url('/fonts/MagazineLetterByBrntlbrnl-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Only You';
+  src: url('/fonts/Only_You_Handwritten_Free_Font.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Jersey';
+  src: url('/fonts/Jersey15-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+.font-magazine {
+  font-family: 'Magazine Letter', serif;
+  font-weight: normal;
+}
+
 .font-handwriting {
-  font-family: "Brush Script MT", "Lucida Handwriting", "Apple Chancery", cursive;
+  font-family: 'Only You', cursive;
   font-weight: 400;
+}
+
+.font-jersey {
+  font-family: 'Jersey', sans-serif;
+  font-weight: normal;
 }
